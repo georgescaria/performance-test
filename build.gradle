@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'io.gatling.gradle' version "${gatlingPluginVersion}"
+    id 'io.freefair.lombok' version "${lombokPluginVersion}"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+gatling {
+    // WARNING: options below only work when logback config file isn't provided
+    logLevel = 'WARN' // logback root level
+    logHttp = 'NONE' // set to 'ALL' for all HTTP traffic in TRACE, 'FAILURES' for failed HTTP traffic in DEBUG
+
+    def users = System.getProperty('users')
+    def region = System.getProperty('region')
+    systemProperties = ['GATLING_PREFIX': 'v2.gatling.' + getDate() + '.' + region + '.' + users]
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd-HH:mm:ss')
+    return formattedDatek
+}
+
+dependencies {
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+
+    gatlingImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+    }
+}
